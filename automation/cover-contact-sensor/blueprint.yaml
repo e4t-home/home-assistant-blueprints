@@ -1,0 +1,101 @@
+blueprint:
+  name: Cover based on Contact Sensor
+  description: Control a cover based on a contact sensor.
+  domain: automation
+  input:
+
+    outdoor_brightness:
+      name: Brightness Sesor (outdoor)
+      description: The brightness sensor to use for outdoor brightness.
+      selector:
+        entity:
+          domain: sensor
+    
+    cover_entity:
+      name: Cover
+      description: The cover to control.
+      selector:
+        entity:
+          domain: cover
+    
+    contact_sensor:
+      name: Contact Sensor
+      description: The contact sensor to monitor.
+      selector:
+        entity:
+          domain: binary_sensor
+
+    cover_open_position:
+      name: Open Position
+      description: The position of the cover when it is open.
+      default: 100
+      selector:
+        number:
+          min: 0
+          max: 100
+          step: 1
+          unit_of_measurement: "%"
+
+    outdoor_brightness_threshold:
+      name: Outdoor Brightness Threshold
+      description: The outdoor brightness threshold.
+      default: 60
+      selector:
+        number:
+          min: 0
+          max: 1000
+          step: 1
+          unit_of_measurement: "lux"
+
+    additional_actions_open:
+      name: Additional Actions
+      description: Actions to run in addition to opening the cover.
+      default: []
+      selector:
+        action: {}
+
+    additional_actions_close:
+      name: Additional Actions
+      description: Actions to run in addition to closing the cover.
+      default: []
+      selector:
+        action: {}
+
+trigger:
+  - platform: state
+    entity_id: !input "contact_sensor"
+    to: "on"
+    id: "contact_sensor_open"
+  - platform: state
+    entity_id: !input "contact_sensor"
+    to: "off"
+    id: "contact_sensor_closed"
+
+condition:
+  - condition: numeric_state
+    entity_id: !input "outdoor_brightness"
+    below: !input "outdoor_brightness_threshold"
+
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: "contact_sensor_open"
+        sequence:
+          - service: cover.set_cover_position
+            target:
+              entity_id: !input "cover_entity"
+            data:
+              position: !input "cover_open_position"
+          - choose: []
+            default: !input "additional_actions_open"
+
+      - conditions:
+          - condition: trigger
+            id: "contact_sensor_closed"
+        sequence:
+          - service: cover.close_cover
+            target:
+              entity_id: !input "cover_entity"
+          - choose: []
+            default: !input "additional_actions_close"
