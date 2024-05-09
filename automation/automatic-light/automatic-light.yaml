@@ -1,0 +1,66 @@
+blueprint:
+  name: Automatic Light
+  description: Turn on a light when a door or motion sensor is triggered and it is dark outside.
+  domain: automation
+  input:
+
+    outdoor_brightness:
+      name: Brightness Sensor (outdoor)
+      description: The brightness sensor to use for outdoor brightness.
+      selector:
+        entity:
+          domain: sensor
+          device_class: illuminance
+    
+    lights:
+      name: Lights
+      description: The light to turn on.
+      selector:
+        entity:
+          multiple: true
+          domain: light
+    
+    door_or_motion:
+      name: Door or Motion Sensor
+      description: The door or motion sensor to use for triggering the light.
+      selector:
+        entity:
+          domain: binary_sensor
+    
+    windows:
+      name: Window Sensors
+      description: The window sensors to monitor.
+      selector:
+        entity:
+          multiple: true
+          domain: binary_sensor
+
+    outdoor_brightness_threshold:
+      name: Outdoor Brightness Threshold
+      description: The outdoor brightness threshold.
+      default: 60
+      selector:
+        number:
+          min: 0
+          max: 1000
+          step: 1
+          unit_of_measurement: "lux"
+
+
+trigger:
+  - platform: state
+    entity_id: !input "door_or_motion"
+    to: "on"
+
+condition:
+  - condition: numeric_state
+    entity_id: !input "outdoor_brightness"
+    below: !input "outdoor_brightness_threshold"
+  - condition: state
+    entity_id: !input "windows"
+    state: "off"
+
+action:
+  - service: light.turn_on
+    target:
+      entity_id: !input "lights"
