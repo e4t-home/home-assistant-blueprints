@@ -1,0 +1,55 @@
+blueprint:
+  name: Homematic HmIP-BSM Controller
+  domain: automation
+  input:
+
+    homematic_switch:
+      name: HomeMatic Switch
+      description: The HomeMatic switch to control.
+      selector:
+        device:
+    
+    action_top_short:
+      name: Top Button Short Press
+      default: []
+      selector:
+        action: {}
+    
+    action_top_long:
+      name: Top Button Long Press
+      default: []
+      selector:
+        action: {}
+      
+    action_bottom_short:
+      name: Bottom Button Short Press
+      default: []
+      selector:
+        action: {}
+    
+    action_bottom_long:
+      name: Bottom Button Long Press
+      default: []
+      selector:
+        action: {}
+
+trigger:
+  platform: event
+  event_type: homematic.keypress
+  event_data:
+    device_id: !input "homematic_switch"
+  
+
+action:
+  - variables:
+      channel: '{{ trigger.event.data.subtype }}'
+      type: '{{ trigger.event.data.type }}'
+  - choose:
+      - conditions: "{{ channel == 2 and type == 'press_short' }}"
+        sequence: !input 'action_top_short'
+      - conditions: "{{ channel == 2 and type == 'press_long' }}"
+        sequence: !input 'action_top_long'
+      - conditions: "{{ channel == 1 and type == 'press_short' }}"
+        sequence: !input 'action_bottom_short'
+      - conditions: "{{ channel == 1 and type == 'press_long' }}"
+        sequence: !input 'action_bottom_long'
