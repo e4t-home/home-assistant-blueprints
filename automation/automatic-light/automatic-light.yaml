@@ -35,16 +35,12 @@ blueprint:
           multiple: true
           domain: binary_sensor
 
-    outdoor_brightness_threshold:
+    outdoor_brightness_threshold_helper:
       name: Outdoor Brightness Threshold
-      description: The outdoor brightness threshold.
-      default: 60
+      description: The outdoor brightness threshold. (helper entity)
       selector:
-        number:
-          min: 0
-          max: 1000
-          step: 1
-          unit_of_measurement: "lux"
+        entity:
+          domain: input_number
 
 
 trigger:
@@ -55,7 +51,7 @@ trigger:
 condition:
   - condition: numeric_state
     entity_id: !input "outdoor_brightness"
-    below: !input "outdoor_brightness_threshold"
+    below: !input "outdoor_brightness_threshold_helper"
   - condition: state
     entity_id: !input "windows"
     state: "off"
