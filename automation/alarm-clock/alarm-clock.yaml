@@ -47,3 +47,6 @@ action:
   - service: cover.open_cover
     target:
       entity_id: !input "covers"
+  - service: input_boolean.turn_off
+    target:
+      entity_id: !input "alarm_clock_enabled"
