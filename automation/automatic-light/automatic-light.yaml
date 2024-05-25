@@ -20,11 +20,12 @@ blueprint:
           multiple: true
           domain: light
     
-    door_or_motion:
+    door_or_motion_sensors:
       name: Door or Motion Sensor
       description: The door or motion sensor to use for triggering the light.
       selector:
         entity:
+          multiple: true
           domain: binary_sensor
     
     windows:
@@ -45,7 +46,7 @@ blueprint:
 
 trigger:
   - platform: state
-    entity_id: !input "door_or_motion"
+    entity_id: !input "door_or_motion_sensors"
     to: "on"
 
 condition:
