@@ -1,0 +1,47 @@
+blueprint:
+  name: Gardena Water Control
+  domain: automation
+  input:
+
+    gardena_timer:
+      name: Gardena Timer
+      description: The Gardena timer to control.
+      selector:
+        entity:
+          domain: number
+    
+    time_morning:
+      name: Morning
+      description: The time to start watering in the morning.
+      selector:
+        time:
+    
+    time_evening:
+      name: Evening
+      description: The time to start watering in the evening.
+      selector:
+        time:
+
+    watering_duration:
+      name: Watering Duration
+      description: The duration to water the garden.
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 60
+          unit_of_measurement: minutes
+
+
+trigger:
+  - platform: time
+    at: !input time_morning
+  - platform: time
+    at: !input time_evening
+
+action:
+  - service: number.set_value
+    target:
+      entity_id: !input gardena_timer
+    data:
+      value: !input watering_duration
