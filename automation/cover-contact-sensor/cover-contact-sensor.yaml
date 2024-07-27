@@ -3,21 +3,20 @@ blueprint:
   description: Control a cover based on a contact sensor.
   domain: automation
   input:
-
     outdoor_brightness:
       name: Brightness Sesor (outdoor)
       description: The brightness sensor to use for outdoor brightness.
       selector:
         entity:
           domain: sensor
-    
+
     cover_entity:
       name: Cover
       description: The cover to control.
       selector:
         entity:
           domain: cover
-    
+
     contact_sensor:
       name: Contact Sensor
       description: The contact sensor to monitor.

@@ -3,7 +3,6 @@ blueprint:
   description: Turn on a light when a door or motion sensor is triggered and it is dark outside.
   domain: automation
   input:
-
     outdoor_brightness:
       name: Brightness Sensor (outdoor)
       description: The brightness sensor to use for outdoor brightness.
@@ -11,7 +10,7 @@ blueprint:
         entity:
           domain: sensor
           device_class: illuminance
-    
+
     lights:
       name: Lights
       description: The light to turn on.
@@ -19,7 +18,7 @@ blueprint:
         entity:
           multiple: true
           domain: light
-    
+
     door_or_motion_sensors:
       name: Door or Motion Sensor
       description: The door or motion sensor to use for triggering the light.
@@ -27,7 +26,7 @@ blueprint:
         entity:
           multiple: true
           domain: binary_sensor
-    
+
     windows:
       name: Window Sensors
       description: The window sensors to monitor.
@@ -42,7 +41,6 @@ blueprint:
       selector:
         entity:
           domain: input_number
-
 
 trigger:
   - platform: state

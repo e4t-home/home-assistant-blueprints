@@ -2,33 +2,31 @@ blueprint:
   name: Alarm Clock
   domain: automation
   input:
-    
     lights:
       name: Lights
       selector:
         entity:
           multiple: true
           domain: light
-    
+
     covers:
       name: Covers
       selector:
         entity:
           multiple: true
           domain: cover
-    
+
     time_helper:
       name: Time (helper)
       selector:
         entity:
           domain: input_datetime
-    
+
     alarm_clock_enabled:
       name: Alarm Clock Enabled (helper)
       selector:
         entity:
           domain: input_boolean
-
 
 trigger:
   - platform: time
@@ -38,7 +36,6 @@ condition:
   - condition: state
     entity_id: !input "alarm_clock_enabled"
     state: "on"
-
 
 action:
   - service: light.turn_on
