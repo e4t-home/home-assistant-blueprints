@@ -1,13 +1,13 @@
 blueprint:
-  name: Gardena Water Control
+  name: Automatic Irrigation
   domain: automation
   input:
-    gardena_timer:
-      name: Gardena Timer
-      description: The Gardena timer to control.
+    valve:
+      name: Valve
+      description: The valve to control.
       selector:
         entity:
-          domain: number
+          domain: valve
 
     time_morning:
       name: Morning
@@ -38,8 +38,5 @@ trigger:
     at: !input time_evening
 
 action:
-  - service: number.set_value
-    target:
-      entity_id: !input gardena_timer
-    data:
-      value: !input watering_duration
+  - action: valve.open_valve
+    entity_id: !input valve
