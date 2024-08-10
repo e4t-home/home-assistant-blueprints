@@ -40,3 +40,6 @@ trigger:
 action:
   - action: valve.open_valve
     entity_id: !input valve
+  - delay: !input watering_duration
+  - action: valve.close_valve
+    entity_id: !input valve
