@@ -6,6 +6,7 @@ blueprint:
     outdoor_brightness:
       name: Brightness Sensor (outdoor)
       description: The brightness sensor to use for outdoor brightness.
+      default: {}
       selector:
         entity:
           domain: sensor
@@ -30,6 +31,7 @@ blueprint:
     windows:
       name: Window Sensors
       description: The window sensors to monitor.
+      default: {} 
       selector:
         entity:
           multiple: true
@@ -38,6 +40,7 @@ blueprint:
     outdoor_brightness_threshold_helper:
       name: Outdoor Brightness Threshold
       description: The outdoor brightness threshold. (helper entity)
+      default: {}
       selector:
         entity:
           domain: input_number
