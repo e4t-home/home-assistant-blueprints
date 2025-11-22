@@ -1,5 +1,5 @@
 blueprint:
-  name: Automatic Light (dev)
+  name: Automatic Light
   description: Turn on a light when a door or motion sensor is triggered and it is dark outside.
   domain: automation
   input:
@@ -45,6 +45,7 @@ blueprint:
     covers:
       name: Cover Entities
       description: The cover entities to monitor. (Turns on the light only if all covers are closed)
+      required: false
       selector:
         entity:
           multiple: true
