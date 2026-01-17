@@ -1,0 +1,117 @@
+blueprint:
+  name: Homematic 6-Key Remote Controller
+  domain: automation
+  input:
+    homematic_remote:
+      name: HomeMatic 6-Key Remote
+      description: The HomeMatic 6-key remote to control.
+      selector:
+        device:
+
+    action_button1_short:
+      name: Button 1 Short Press
+      default: []
+      selector:
+        action: {}
+
+    action_button1_long:
+      name: Button 1 Long Press
+      default: []
+      selector:
+        action: {}
+
+    action_button2_short:
+      name: Button 2 Short Press
+      default: []
+      selector:
+        action: {}
+
+    action_button2_long:
+      name: Button 2 Long Press
+      default: []
+      selector:
+        action: {}
+
+    action_button3_short:
+      name: Button 3 Short Press
+      default: []
+      selector:
+        action: {}
+
+    action_button3_long:
+      name: Button 3 Long Press
+      default: []
+      selector:
+        action: {}
+
+    action_button4_short:
+      name: Button 4 Short Press
+      default: []
+      selector:
+        action: {}
+
+    action_button4_long:
+      name: Button 4 Long Press
+      default: []
+      selector:
+        action: {}
+
+    action_button5_short:
+      name: Button 5 Short Press
+      default: []
+      selector:
+        action: {}
+
+    action_button5_long:
+      name: Button 5 Long Press
+      default: []
+      selector:
+        action: {}
+
+    action_button6_short:
+      name: Button 6 Short Press
+      default: []
+      selector:
+        action: {}
+
+    action_button6_long:
+      name: Button 6 Long Press
+      default: []
+      selector:
+        action: {}
+
+trigger:
+  platform: event
+  event_type: homematic.keypress
+  event_data:
+    device_id: !input "homematic_remote"
+
+action:
+  - variables:
+      channel: "{{ trigger.event.data.subtype }}"
+      type: "{{ trigger.event.data.type }}"
+  - choose:
+      - conditions: "{{ channel == 1 and type == 'press_short' }}"
+        sequence: !input "action_button1_short"
+      - conditions: "{{ channel == 1 and type == 'press_long' }}"
+        sequence: !input "action_button1_long"
+      - conditions: "{{ channel == 2 and type == 'press_short' }}"
+        sequence: !input "action_button2_short"
+      - conditions: "{{ channel == 2 and type == 'press_long' }}"
+        sequence: !input "action_button2_long"
+      - conditions: "{{ channel == 3 and type == 'press_short' }}"
+        sequence: !input "action_button3_short"
+      - conditions: "{{ channel == 3 and type == 'press_long' }}"
+        sequence: !input "action_button3_long"
+      - conditions: "{{ channel == 4 and type == 'press_short' }}"
+        sequence: !input "action_button4_short"
+      - conditions: "{{ channel == 4 and type == 'press_long' }}"
+        sequence: !input "action_button4_long"
+      - conditions: "{{ channel == 5 and type == 'press_short' }}"
+        sequence: !input "action_button5_short"
+      - conditions: "{{ channel == 5 and type == 'press_long' }}"
+        sequence: !input "action_button5_long"
+      - conditions: "{{ channel == 6 and type == 'press_short' }}"
+        sequence: !input "action_button6_short"
+      - conditions: "{{ channel == 6 and type == 'press_long' }}"
+        sequence: !input "action_button6_long"
