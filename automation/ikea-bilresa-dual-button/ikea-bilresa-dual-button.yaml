@@ -1,56 +1,88 @@
 blueprint:
   name: IKEA BILRESA Dual Button
-  description: Automation for the IKEA BILRESA dual button (Matter) switch. Supports press actions for both buttons.
+  description: Automation for the IKEA BILRESA dual button (Matter) switch. Supports short press and long press actions for both buttons.
   domain: automation
   input:
-    bilresa_device:
-      name: IKEA BILRESA Dual Button
-      description: The IKEA BILRESA dual button device to use.
+    button_1_entity:
+      name: Button 1 Event Entity
+      description: The event entity for button 1 (Taste 1).
       selector:
-        device:
+        entity:
           filter:
-            - integration: matter
-              manufacturer: IKEA of Sweden
-              model: BILRESA dual button
+            - domain: event
 
-    action_button1:
-      name: Button 1 Press
-      description: Action to run when button 1 is pressed.
+    button_2_entity:
+      name: Button 2 Event Entity
+      description: The event entity for button 2 (Taste 2).
+      selector:
+        entity:
+          filter:
+            - domain: event
+
+    action_button1_short:
+      name: Button 1 Short Press
+      description: Action to run when button 1 is pressed briefly.
       default: []
       selector:
         action: {}
 
-    action_button2:
-      name: Button 2 Press
-      description: Action to run when button 2 is pressed.
+    action_button1_long:
+      name: Button 1 Long Press
+      description: Action to run when button 1 is released after being held down.
       default: []
       selector:
         action: {}
 
-mode: single
-max_exceeded: silent
+    action_button2_short:
+      name: Button 2 Short Press
+      description: Action to run when button 2 is pressed briefly.
+      default: []
+      selector:
+        action: {}
+
+    action_button2_long:
+      name: Button 2 Long Press
+      description: Action to run when button 2 is released after being held down.
+      default: []
+      selector:
+        action: {}
+
+mode: parallel
+max: 10
 
 trigger:
-  - platform: device
-    domain: matter
-    device_id: !input bilresa_device
-    type: pressed
-    subtype: button_1
+  - platform: state
+    entity_id: !input button_1_entity
     id: button_1
-  - platform: device
-    domain: matter
-    device_id: !input bilresa_device
-    type: pressed
-    subtype: button_2
+  - platform: state
+    entity_id: !input button_2_entity
     id: button_2
 
 action:
+  - variables:
+      event_type: "{{ trigger.to_state.state }}"
   - choose:
       - conditions:
           - condition: trigger
             id: button_1
-        sequence: !input action_button1
+          - condition: template
+            value_template: "{{ event_type == 'short_release' }}"
+        sequence: !input action_button1_short
+      - conditions:
+          - condition: trigger
+            id: button_1
+          - condition: template
+            value_template: "{{ event_type == 'long_release' }}"
+        sequence: !input action_button1_long
       - conditions:
           - condition: trigger
             id: button_2
-        sequence: !input action_button2
+          - condition: template
+            value_template: "{{ event_type == 'short_release' }}"
+        sequence: !input action_button2_short
+      - conditions:
+          - condition: trigger
+            id: button_2
+          - condition: template
+            value_template: "{{ event_type == 'long_release' }}"
+        sequence: !input action_button2_long

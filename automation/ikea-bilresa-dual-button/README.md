@@ -6,4 +6,13 @@
 
 ## Description
 
-Automation for the IKEA BILRESA dual button (Matter) switch. Assign custom actions to each of the two buttons.
+Automation for the IKEA BILRESA dual button (Matter) switch. Assign custom actions to each of the two buttons for both short press and long press events.
+
+## Inputs
+
+- **Button 1 Event Entity** - The event entity for button 1 (Taste 1)
+- **Button 2 Event Entity** - The event entity for button 2 (Taste 2)
+- **Button 1 Short Press** - Action for short press on button 1
+- **Button 1 Long Press** - Action for long press on button 1
+- **Button 2 Short Press** - Action for short press on button 2
+- **Button 2 Long Press** - Action for long press on button 2
