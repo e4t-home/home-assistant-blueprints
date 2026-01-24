@@ -7,4 +7,4 @@
 - [automatic-light](automation/automatic-light/README.md)
 - [alarm-clock](automation/alarm-clock/README.md)
 - [gardena-water-control](automation/gardena-water-control/README.md)
-- [ikea-bilresa-dual-button](automation/ikea-bilresa-dual-button/ikea-bilresa-dual-button.yaml)
+- [ikea-bilresa-dual-button](automation/ikea-bilresa-dual-button/README.md)
