@@ -1,0 +1,56 @@
+blueprint:
+  name: IKEA BILRESA Dual Button
+  description: Automation for the IKEA BILRESA dual button (Matter) switch. Supports press actions for both buttons.
+  domain: automation
+  input:
+    bilresa_device:
+      name: IKEA BILRESA Dual Button
+      description: The IKEA BILRESA dual button device to use.
+      selector:
+        device:
+          filter:
+            - integration: matter
+              manufacturer: IKEA of Sweden
+              model: BILRESA dual button
+
+    action_button1:
+      name: Button 1 Press
+      description: Action to run when button 1 is pressed.
+      default: []
+      selector:
+        action: {}
+
+    action_button2:
+      name: Button 2 Press
+      description: Action to run when button 2 is pressed.
+      default: []
+      selector:
+        action: {}
+
+mode: single
+max_exceeded: silent
+
+trigger:
+  - platform: device
+    domain: matter
+    device_id: !input bilresa_device
+    type: pressed
+    subtype: button_1
+    id: button_1
+  - platform: device
+    domain: matter
+    device_id: !input bilresa_device
+    type: pressed
+    subtype: button_2
+    id: button_2
+
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: button_1
+        sequence: !input action_button1
+      - conditions:
+          - condition: trigger
+            id: button_2
+        sequence: !input action_button2
