@@ -51,9 +51,11 @@ max: 10
 trigger:
   - platform: state
     entity_id: !input button_1_entity
+    attribute: event_type
     id: button_1
   - platform: state
     entity_id: !input button_2_entity
+    attribute: event_type
     id: button_2
 
 action:
