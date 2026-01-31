@@ -8,16 +8,14 @@ blueprint:
       description: The event entity for button 1 (Taste 1).
       selector:
         entity:
-          filter:
-            - domain: event
+          domain: event
 
     button_2_entity:
       name: Button 2 Event Entity
       description: The event entity for button 2 (Taste 2).
       selector:
         entity:
-          filter:
-            - domain: event
+          domain: event
 
     action_button1_short:
       name: Button 1 Short Press
