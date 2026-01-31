@@ -60,7 +60,7 @@ trigger:
 
 action:
   - variables:
-      event_type: "{{ trigger.to_state.state }}"
+      event_type: "{{ state_attr(trigger.entity_id, 'event_type') }}"
   - choose:
       - conditions:
           - condition: trigger
