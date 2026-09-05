@@ -2,78 +2,93 @@ blueprint:
   name: Homematic 6-Key Remote Controller
   domain: automation
   input:
-    homematic_remote:
-      name: HomeMatic 6-Key Remote
-      description: The HomeMatic 6-key remote to control.
+    button_1:
+      name: Button 1 Event Entity
+      description: The "event" entity for channel 1 (e.g. event.remote_ch1)
       selector:
-        device:
+        entity:
+          domain: event
+    button_2:
+      name: Button 2 Event Entity
+      selector:
+        entity:
+          domain: event
+    button_3:
+      name: Button 3 Event Entity
+      selector:
+        entity:
+          domain: event
+    button_4:
+      name: Button 4 Event Entity
+      selector:
+        entity:
+          domain: event
+    button_5:
+      name: Button 5 Event Entity
+      selector:
+        entity:
+          domain: event
+    button_6:
+      name: Button 6 Event Entity
+      selector:
+        entity:
+          domain: event
 
     action_button1_short:
       name: Button 1 Short Press
       default: []
       selector:
         action: {}
-
     action_button1_long:
       name: Button 1 Long Press
       default: []
       selector:
         action: {}
-
     action_button2_short:
       name: Button 2 Short Press
       default: []
       selector:
         action: {}
-
     action_button2_long:
       name: Button 2 Long Press
       default: []
       selector:
         action: {}
-
     action_button3_short:
       name: Button 3 Short Press
       default: []
       selector:
         action: {}
-
     action_button3_long:
       name: Button 3 Long Press
       default: []
       selector:
         action: {}
-
     action_button4_short:
       name: Button 4 Short Press
       default: []
       selector:
         action: {}
-
     action_button4_long:
       name: Button 4 Long Press
       default: []
       selector:
         action: {}
-
     action_button5_short:
       name: Button 5 Short Press
       default: []
       selector:
         action: {}
-
     action_button5_long:
       name: Button 5 Long Press
       default: []
       selector:
         action: {}
-
     action_button6_short:
       name: Button 6 Short Press
       default: []
       selector:
         action: {}
-
     action_button6_long:
       name: Button 6 Long Press
       default: []
@@ -81,37 +96,90 @@ blueprint:
         action: {}
 
 trigger:
-  platform: event
-  event_type: homematic.keypress
-  event_data:
-    device_id: !input "homematic_remote"
+  - platform: state
+    entity_id: !input button_1
+    attribute: event_type
+    to: press_short
+    id: b1_short
+  - platform: state
+    entity_id: !input button_1
+    attribute: event_type
+    to: press_long
+    id: b1_long
+  - platform: state
+    entity_id: !input button_2
+    attribute: event_type
+    to: press_short
+    id: b2_short
+  - platform: state
+    entity_id: !input button_2
+    attribute: event_type
+    to: press_long
+    id: b2_long
+  - platform: state
+    entity_id: !input button_3
+    attribute: event_type
+    to: press_short
+    id: b3_short
+  - platform: state
+    entity_id: !input button_3
+    attribute: event_type
+    to: press_long
+    id: b3_long
+  - platform: state
+    entity_id: !input button_4
+    attribute: event_type
+    to: press_short
+    id: b4_short
+  - platform: state
+    entity_id: !input button_4
+    attribute: event_type
+    to: press_long
+    id: b4_long
+  - platform: state
+    entity_id: !input button_5
+    attribute: event_type
+    to: press_short
+    id: b5_short
+  - platform: state
+    entity_id: !input button_5
+    attribute: event_type
+    to: press_long
+    id: b5_long
+  - platform: state
+    entity_id: !input button_6
+    attribute: event_type
+    to: press_short
+    id: b6_short
+  - platform: state
+    entity_id: !input button_6
+    attribute: event_type
+    to: press_long
+    id: b6_long
 
 action:
-  - variables:
-      channel: "{{ trigger.event.data.subtype }}"
-      type: "{{ trigger.event.data.type }}"
   - choose:
-      - conditions: "{{ channel == 1 and type == 'press_short' }}"
+      - conditions: "{{ trigger.id == 'b1_short' }}"
         sequence: !input "action_button1_short"
-      - conditions: "{{ channel == 1 and type == 'press_long' }}"
+      - conditions: "{{ trigger.id == 'b1_long' }}"
         sequence: !input "action_button1_long"
-      - conditions: "{{ channel == 2 and type == 'press_short' }}"
+      - conditions: "{{ trigger.id == 'b2_short' }}"
         sequence: !input "action_button2_short"
-      - conditions: "{{ channel == 2 and type == 'press_long' }}"
+      - conditions: "{{ trigger.id == 'b2_long' }}"
         sequence: !input "action_button2_long"
-      - conditions: "{{ channel == 3 and type == 'press_short' }}"
+      - conditions: "{{ trigger.id == 'b3_short' }}"
         sequence: !input "action_button3_short"
-      - conditions: "{{ channel == 3 and type == 'press_long' }}"
+      - conditions: "{{ trigger.id == 'b3_long' }}"
         sequence: !input "action_button3_long"
-      - conditions: "{{ channel == 4 and type == 'press_short' }}"
+      - conditions: "{{ trigger.id == 'b4_short' }}"
         sequence: !input "action_button4_short"
-      - conditions: "{{ channel == 4 and type == 'press_long' }}"
+      - conditions: "{{ trigger.id == 'b4_long' }}"
         sequence: !input "action_button4_long"
-      - conditions: "{{ channel == 5 and type == 'press_short' }}"
+      - conditions: "{{ trigger.id == 'b5_short' }}"
         sequence: !input "action_button5_short"
-      - conditions: "{{ channel == 5 and type == 'press_long' }}"
+      - conditions: "{{ trigger.id == 'b5_long' }}"
         sequence: !input "action_button5_long"
-      - conditions: "{{ channel == 6 and type == 'press_short' }}"
+      - conditions: "{{ trigger.id == 'b6_short' }}"
         sequence: !input "action_button6_short"
-      - conditions: "{{ channel == 6 and type == 'press_long' }}"
+      - conditions: "{{ trigger.id == 'b6_long' }}"
         sequence: !input "action_button6_long"

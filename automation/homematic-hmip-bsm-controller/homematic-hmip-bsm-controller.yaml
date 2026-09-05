@@ -2,30 +2,33 @@ blueprint:
   name: Homematic HmIP-BSM Controller
   domain: automation
   input:
-    homematic_switch:
-      name: HomeMatic Switch
-      description: The HomeMatic switch to control.
+    button_top:
+      name: Top Button Event Entity
+      description: The "event" entity for the top button/channel (e.g. event.hauptschalter_kueche_ch2)
       selector:
-        device:
-
+        entity:
+          domain: event
+    button_bottom:
+      name: Bottom Button Event Entity
+      description: The "event" entity for the bottom button/channel (e.g. event.hauptschalter_kueche_ch1)
+      selector:
+        entity:
+          domain: event
     action_top_short:
       name: Top Button Short Press
       default: []
       selector:
         action: {}
-
     action_top_long:
       name: Top Button Long Press
       default: []
       selector:
         action: {}
-
     action_bottom_short:
       name: Bottom Button Short Press
       default: []
       selector:
         action: {}
-
     action_bottom_long:
       name: Bottom Button Long Press
       default: []
@@ -33,21 +36,34 @@ blueprint:
         action: {}
 
 trigger:
-  platform: event
-  event_type: homematic.keypress
-  event_data:
-    device_id: !input "homematic_switch"
+  - platform: state
+    entity_id: !input button_top
+    attribute: event_type
+    to: press_short
+    id: top_short
+  - platform: state
+    entity_id: !input button_top
+    attribute: event_type
+    to: press_long
+    id: top_long
+  - platform: state
+    entity_id: !input button_bottom
+    attribute: event_type
+    to: press_short
+    id: bottom_short
+  - platform: state
+    entity_id: !input button_bottom
+    attribute: event_type
+    to: press_long
+    id: bottom_long
 
 action:
-  - variables:
-      channel: "{{ trigger.event.data.subtype }}"
-      type: "{{ trigger.event.data.type }}"
   - choose:
-      - conditions: "{{ channel == 2 and type == 'press_short' }}"
-        sequence: !input "action_top_short"
-      - conditions: "{{ channel == 2 and type == 'press_long' }}"
-        sequence: !input "action_top_long"
-      - conditions: "{{ channel == 1 and type == 'press_short' }}"
-        sequence: !input "action_bottom_short"
-      - conditions: "{{ channel == 1 and type == 'press_long' }}"
-        sequence: !input "action_bottom_long"
+      - conditions: "{{ trigger.id == 'top_short' }}"
+        sequence: !input action_top_short
+      - conditions: "{{ trigger.id == 'top_long' }}"
+        sequence: !input action_top_long
+      - conditions: "{{ trigger.id == 'bottom_short' }}"
+        sequence: !input action_bottom_short
+      - conditions: "{{ trigger.id == 'bottom_long' }}"
+        sequence: !input action_bottom_long
