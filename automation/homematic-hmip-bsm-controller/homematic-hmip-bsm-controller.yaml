@@ -4,13 +4,11 @@ blueprint:
   input:
     button_top:
       name: Top Button Event Entity
-      description: The "event" entity for the top button/channel (e.g. event.hauptschalter_kueche_ch2)
       selector:
         entity:
           domain: event
     button_bottom:
       name: Bottom Button Event Entity
-      description: The "event" entity for the bottom button/channel (e.g. event.hauptschalter_kueche_ch1)
       selector:
         entity:
           domain: event
@@ -35,29 +33,39 @@ blueprint:
       selector:
         action: {}
 
-trigger:
-  - platform: state
-    entity_id: !input button_top
-    attribute: event_type
-    to: press_short
+triggers:
+  - trigger: event.received
+    target:
+      entity_id: !input button_top
+    options:
+      event_type:
+        - press_short
     id: top_short
-  - platform: state
-    entity_id: !input button_top
-    attribute: event_type
-    to: press_long
+  - trigger: event.received
+    target:
+      entity_id: !input button_top
+    options:
+      event_type:
+        - press_long
     id: top_long
-  - platform: state
-    entity_id: !input button_bottom
-    attribute: event_type
-    to: press_short
+  - trigger: event.received
+    target:
+      entity_id: !input button_bottom
+    options:
+      event_type:
+        - press_short
     id: bottom_short
-  - platform: state
-    entity_id: !input button_bottom
-    attribute: event_type
-    to: press_long
+  - trigger: event.received
+    target:
+      entity_id: !input button_bottom
+    options:
+      event_type:
+        - press_long
     id: bottom_long
 
-action:
+conditions: []
+
+actions:
   - choose:
       - conditions: "{{ trigger.id == 'top_short' }}"
         sequence: !input action_top_short
@@ -67,3 +75,4 @@ action:
         sequence: !input action_bottom_short
       - conditions: "{{ trigger.id == 'bottom_long' }}"
         sequence: !input action_bottom_long
+mode: single

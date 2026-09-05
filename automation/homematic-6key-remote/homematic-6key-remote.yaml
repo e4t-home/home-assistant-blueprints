@@ -4,7 +4,6 @@ blueprint:
   input:
     button_1:
       name: Button 1 Event Entity
-      description: The "event" entity for channel 1 (e.g. event.remote_ch1)
       selector:
         entity:
           domain: event
@@ -95,91 +94,106 @@ blueprint:
       selector:
         action: {}
 
-trigger:
-  - platform: state
-    entity_id: !input button_1
-    attribute: event_type
-    to: press_short
+triggers:
+  - trigger: event.received
+    target:
+      entity_id: !input button_1
+    options:
+      event_type: [press_short]
     id: b1_short
-  - platform: state
-    entity_id: !input button_1
-    attribute: event_type
-    to: press_long
+  - trigger: event.received
+    target:
+      entity_id: !input button_1
+    options:
+      event_type: [press_long]
     id: b1_long
-  - platform: state
-    entity_id: !input button_2
-    attribute: event_type
-    to: press_short
+  - trigger: event.received
+    target:
+      entity_id: !input button_2
+    options:
+      event_type: [press_short]
     id: b2_short
-  - platform: state
-    entity_id: !input button_2
-    attribute: event_type
-    to: press_long
+  - trigger: event.received
+    target:
+      entity_id: !input button_2
+    options:
+      event_type: [press_long]
     id: b2_long
-  - platform: state
-    entity_id: !input button_3
-    attribute: event_type
-    to: press_short
+  - trigger: event.received
+    target:
+      entity_id: !input button_3
+    options:
+      event_type: [press_short]
     id: b3_short
-  - platform: state
-    entity_id: !input button_3
-    attribute: event_type
-    to: press_long
+  - trigger: event.received
+    target:
+      entity_id: !input button_3
+    options:
+      event_type: [press_long]
     id: b3_long
-  - platform: state
-    entity_id: !input button_4
-    attribute: event_type
-    to: press_short
+  - trigger: event.received
+    target:
+      entity_id: !input button_4
+    options:
+      event_type: [press_short]
     id: b4_short
-  - platform: state
-    entity_id: !input button_4
-    attribute: event_type
-    to: press_long
+  - trigger: event.received
+    target:
+      entity_id: !input button_4
+    options:
+      event_type: [press_long]
     id: b4_long
-  - platform: state
-    entity_id: !input button_5
-    attribute: event_type
-    to: press_short
+  - trigger: event.received
+    target:
+      entity_id: !input button_5
+    options:
+      event_type: [press_short]
     id: b5_short
-  - platform: state
-    entity_id: !input button_5
-    attribute: event_type
-    to: press_long
+  - trigger: event.received
+    target:
+      entity_id: !input button_5
+    options:
+      event_type: [press_long]
     id: b5_long
-  - platform: state
-    entity_id: !input button_6
-    attribute: event_type
-    to: press_short
+  - trigger: event.received
+    target:
+      entity_id: !input button_6
+    options:
+      event_type: [press_short]
     id: b6_short
-  - platform: state
-    entity_id: !input button_6
-    attribute: event_type
-    to: press_long
+  - trigger: event.received
+    target:
+      entity_id: !input button_6
+    options:
+      event_type: [press_long]
     id: b6_long
 
-action:
+conditions: []
+
+actions:
   - choose:
       - conditions: "{{ trigger.id == 'b1_short' }}"
-        sequence: !input "action_button1_short"
+        sequence: !input action_button1_short
       - conditions: "{{ trigger.id == 'b1_long' }}"
-        sequence: !input "action_button1_long"
+        sequence: !input action_button1_long
       - conditions: "{{ trigger.id == 'b2_short' }}"
-        sequence: !input "action_button2_short"
+        sequence: !input action_button2_short
       - conditions: "{{ trigger.id == 'b2_long' }}"
-        sequence: !input "action_button2_long"
+        sequence: !input action_button2_long
       - conditions: "{{ trigger.id == 'b3_short' }}"
-        sequence: !input "action_button3_short"
+        sequence: !input action_button3_short
       - conditions: "{{ trigger.id == 'b3_long' }}"
-        sequence: !input "action_button3_long"
+        sequence: !input action_button3_long
       - conditions: "{{ trigger.id == 'b4_short' }}"
-        sequence: !input "action_button4_short"
+        sequence: !input action_button4_short
       - conditions: "{{ trigger.id == 'b4_long' }}"
-        sequence: !input "action_button4_long"
+        sequence: !input action_button4_long
       - conditions: "{{ trigger.id == 'b5_short' }}"
-        sequence: !input "action_button5_short"
+        sequence: !input action_button5_short
       - conditions: "{{ trigger.id == 'b5_long' }}"
-        sequence: !input "action_button5_long"
+        sequence: !input action_button5_long
       - conditions: "{{ trigger.id == 'b6_short' }}"
-        sequence: !input "action_button6_short"
+        sequence: !input action_button6_short
       - conditions: "{{ trigger.id == 'b6_long' }}"
-        sequence: !input "action_button6_long"
+        sequence: !input action_button6_long
+mode: single
