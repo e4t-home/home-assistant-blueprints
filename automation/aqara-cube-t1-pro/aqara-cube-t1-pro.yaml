@@ -4,7 +4,9 @@ blueprint:
     Automation for the Aqara Cube T1 Pro (CTP-R01) in Action Mode via Zigbee2MQTT.
     Supports an action for each side landing face-up, rotate left/right, throw and shake.
     Requires the Zigbee2MQTT "Home Assistant experimental event entities"
-    setting to be enabled so the cube is exposed as an `event` entity.
+    setting to be enabled so the cube is exposed as an `event` entity, plus a
+    separate sensor entity that reports the numeric side currently facing up
+    (the event entity itself does not carry this information).
   domain: automation
   input:
     cube_entity:
@@ -13,6 +15,17 @@ blueprint:
       selector:
         entity:
           domain: event
+
+    cube_side_entity:
+      name: Cube Side Sensor
+      description: >
+        Sensor entity that holds the number (1-6) of the side currently
+        facing up. Zigbee2MQTT does not attach this to the event entity, so
+        it must be read from a separate sensor entity (e.g. exposed by
+        Zigbee2MQTT as a numeric "side" sensor for this device).
+      selector:
+        entity:
+          domain: sensor
 
     action_side_1_up:
       name: Side 1 Up
@@ -123,7 +136,8 @@ conditions: []
 
 actions:
   - variables:
-      side: "{{ trigger.to_state.attributes.action_side | default(0) | int(0) }}"
+      side_entity: !input cube_side_entity
+      side: "{{ states(side_entity) | int(0) }}"
   - choose:
       - conditions: "{{ trigger.id == 'side_up' and side == 1 }}"
         sequence: !input action_side_1_up

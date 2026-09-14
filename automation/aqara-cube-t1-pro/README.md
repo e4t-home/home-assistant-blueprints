@@ -8,11 +8,12 @@
 
 Automation for the Aqara Cube T1 Pro (CTP-R01) in Action Mode via Zigbee2MQTT. Assign custom actions for each side landing face-up, rotate left/right, throw and shake.
 
-Requires the Zigbee2MQTT "Home Assistant experimental event entities" setting to be enabled so the cube is exposed as an `event` entity, and the cube to be switched into Action Mode (press the LINK button 5x swiftly).
+Requires the Zigbee2MQTT "Home Assistant experimental event entities" setting to be enabled so the cube is exposed as an `event` entity, and the cube to be switched into Action Mode (press the LINK button 5x swiftly). The event entity does not carry the side number, so a separate sensor entity that reports the currently facing-up side is also required.
 
 ## Inputs
 
 - **Cube Event Entity** - The event entity for the cube
+- **Cube Side Sensor** - Sensor entity reporting the number (1-6) of the side currently facing up
 - **Side 1 Up** through **Side 6 Up** - Action for when the corresponding side comes to rest facing up
 - **Rotate Left** - Action for counter-clockwise rotation
 - **Rotate Right** - Action for clockwise rotation
