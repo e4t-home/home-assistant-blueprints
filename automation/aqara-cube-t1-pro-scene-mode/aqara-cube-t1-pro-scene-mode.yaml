@@ -1,7 +1,7 @@
 blueprint:
-  name: Aqara Cube T1 Pro
+  name: Aqara Cube T1 Pro (Scene Mode)
   description: >
-    Automation for the Aqara Cube T1 Pro (CTP-R01) in Action Mode via Zigbee2MQTT.
+    Automation for the Aqara Cube T1 Pro (CTP-R01) in Scene Mode via Zigbee2MQTT.
     Supports an action for each side landing face-up, rotate left/right, throw and shake.
     Requires the Zigbee2MQTT "Home Assistant experimental event entities"
     setting to be enabled so the cube is exposed as an `event` entity, plus a
