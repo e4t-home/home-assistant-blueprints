@@ -8,3 +8,4 @@
 - [alarm-clock](automation/alarm-clock/README.md)
 - [gardena-water-control](automation/gardena-water-control/README.md)
 - [ikea-bilresa-dual-button](automation/ikea-bilresa-dual-button/README.md)
+- [aqara-cube-t1-pro](automation/aqara-cube-t1-pro/README.md)
