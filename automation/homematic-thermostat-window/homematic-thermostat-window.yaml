@@ -1,0 +1,105 @@
+blueprint:
+  name: Homematic Thermostat Window Control
+  description: >-
+    Turns a Homematic thermostat off while one or more window contacts are open
+    and restores its previous mode and target temperature once all windows are
+    closed again.
+  domain: automation
+  input:
+    thermostat:
+      name: Thermostat
+      description: The Homematic thermostat (climate entity) to control.
+      selector:
+        entity:
+          domain: climate
+          integration: homematicip_local
+    window_sensors:
+      name: Window Contacts
+      description: One or more window contacts. The thermostat stays off as long as at least one is open.
+      selector:
+        entity:
+          domain: binary_sensor
+          multiple: true
+    open_delay:
+      name: Open Delay
+      description: How long a window must stay open before the thermostat is turned off.
+      default:
+        hours: 0
+        minutes: 1
+        seconds: 0
+      selector:
+        duration: {}
+    close_delay:
+      name: Close Delay
+      description: How long all windows must stay closed before the previous state is restored.
+      default:
+        hours: 0
+        minutes: 0
+        seconds: 30
+      selector:
+        duration: {}
+
+mode: queued
+max: 10
+
+variables:
+  thermostat: !input thermostat
+  window_sensors: !input window_sensors
+  # One snapshot scene per thermostat, so several instances of this blueprint do not collide.
+  scene_id: "window_restore_{{ thermostat.split('.')[1] }}"
+  scene_entity: "scene.window_restore_{{ thermostat.split('.')[1] }}"
+
+triggers:
+  - trigger: state
+    entity_id: !input window_sensors
+    from: "off"
+    to: "on"
+    for: !input open_delay
+    id: window_open
+  - trigger: state
+    entity_id: !input window_sensors
+    to: "off"
+    for: !input close_delay
+    id: window_closed
+
+actions:
+  - choose:
+      # Window opened: remember the current state, then switch the thermostat off.
+      # Skipped if it is already off (e.g. a second window is opened or the user turned it off).
+      - conditions:
+          - condition: trigger
+            id: window_open
+          - condition: template
+            value_template: "{{ states(thermostat) not in ['off', 'unavailable', 'unknown'] }}"
+        sequence:
+          - action: scene.create
+            data:
+              scene_id: "{{ scene_id }}"
+              snapshot_entities:
+                - "{{ thermostat }}"
+          - action: climate.set_hvac_mode
+            target:
+              entity_id: "{{ thermostat }}"
+            data:
+              hvac_mode: "off"
+
+      # All windows closed: restore the snapshot, but only if this automation turned the
+      # thermostat off and nobody has switched it on manually in the meantime.
+      - conditions:
+          - condition: trigger
+            id: window_closed
+          - condition: template
+            value_template: >-
+              {{ window_sensors | select('is_state', 'off') | list | count == window_sensors | count }}
+          - condition: template
+            value_template: "{{ states.scene | selectattr('entity_id', 'eq', scene_entity) | list | count > 0 }}"
+          - condition: state
+            entity_id: !input thermostat
+            state: "off"
+        sequence:
+          - action: scene.turn_on
+            target:
+              entity_id: "{{ scene_entity }}"
+          - action: scene.delete
+            target:
+              entity_id: "{{ scene_entity }}"
